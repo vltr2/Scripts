@@ -10,6 +10,11 @@
 # Zone 1: raw 0x3a 0x07 0x01 0xXX 0x01
 # Zone 2: raw 0x3a 0x07 0x02 0xXX 0x01
 # Fan Speeds max @ FF
+# 
+# Before running this script put each zone into "acoustic mode" by setting speed to 0x00
+# This ought to be needed only once.  It prevents the IMM from taking back control of fan 
+# speed.  If fans ramp up after commanding slow, run it again.  This mode should be able
+# to be disabled by running raw 0x3a 0x07 0x01[or2] 0x00 0x00
 
 import sys
 import os
@@ -36,13 +41,13 @@ except:
     print("failure")
 
 if max_temp < 30:
-    speed_out = "0x08"
-elif max_temp < 35:
     speed_out = "0x10"
-elif max_temp < 40: 
+elif max_temp < 35:
     speed_out = "0x12"
-elif max_temp < 45:
+elif max_temp < 40: 
     speed_out = "0x16"
+elif max_temp < 45:
+    speed_out = "0x1D"
 elif max_temp < 50:
     speed_out = "0x24"
 elif max_temp < 60:
